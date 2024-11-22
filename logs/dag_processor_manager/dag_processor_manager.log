@@ -1139,3 +1139,221 @@ File Path                                  PID    Runtime      # DAGs    # Error
 /opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.09s           2024-11-21T14:32:09
 /opt/airflow/dags/read_write_dag.py                                 1           0  0.10s           2024-11-21T14:32:09
 ================================================================================
+[2024-11-21T14:32:54.720+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.10s           2024-11-21T14:32:41
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.12s           2024-11-21T14:32:41
+================================================================================
+[2024-11-21T14:33:27.843+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.11s           2024-11-21T14:33:14
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.13s           2024-11-21T14:33:14
+================================================================================
+[2024-11-21T14:34:01.080+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.12s           2024-11-21T14:33:46
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.11s           2024-11-21T14:33:46
+================================================================================
+[2024-11-21T14:34:34.152+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.11s           2024-11-21T14:34:20
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.13s           2024-11-21T14:34:20
+================================================================================
+[2024-11-21T14:34:37.280+0000] {manager.py:759} INFO - Searching for files in /opt/airflow/dags
+[2024-11-21T14:34:37.363+0000] {manager.py:762} INFO - There are 2 files in /opt/airflow/dags
+[2024-11-21T14:35:07.497+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.11s           2024-11-21T14:34:52
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.12s           2024-11-21T14:34:52
+================================================================================
+[2024-11-21T14:35:07.596+0000] {manager.py:469} INFO - Exiting gracefully upon receiving signal 15
+[2024-11-22T13:56:48.144+0000] {manager.py:487} INFO - Processing files using up to 2 processes at a time 
+[2024-11-22T13:56:48.145+0000] {manager.py:488} INFO - Process each file at most once every 30 seconds
+[2024-11-22T13:56:48.146+0000] {manager.py:489} INFO - Checking for new files in /opt/airflow/dags every 300 seconds
+[2024-11-22T13:56:48.147+0000] {manager.py:759} INFO - Searching for files in /opt/airflow/dags
+[2024-11-22T13:56:48.181+0000] {manager.py:762} INFO - There are 2 files in /opt/airflow/dags
+[2024-11-22T13:56:49.421+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                    PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  ----------
+/opt/airflow/dags/mysql_data_entry_dag.py    224  0.04s             0           0
+/opt/airflow/dags/read_write_dag.py          221  0.06s             0           0
+================================================================================
+[2024-11-22T13:57:19.658+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                    PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py    234  0.00s             1           0  0.17s           2024-11-22T13:56:49
+/opt/airflow/dags/read_write_dag.py          231  0.01s             1           0  0.19s           2024-11-22T13:56:49
+================================================================================
+[2024-11-22T13:57:50.020+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                    PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py    244  0.00s             1           0  0.10s           2024-11-22T13:57:19
+/opt/airflow/dags/read_write_dag.py          241  0.02s             1           0  0.10s           2024-11-22T13:57:19
+================================================================================
+[2024-11-22T13:58:20.294+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                    PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py    254  0.00s             1           0  0.10s           2024-11-22T13:57:50
+/opt/airflow/dags/read_write_dag.py          251  0.01s             1           0  0.12s           2024-11-22T13:57:50
+================================================================================
+[2024-11-22T13:58:50.865+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                    PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py    264  0.00s             1           0  0.09s           2024-11-22T13:58:20
+/opt/airflow/dags/read_write_dag.py          261  0.01s             1           0  0.10s           2024-11-22T13:58:20
+================================================================================
+[2024-11-22T13:59:21.171+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                    PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py    404  0.00s             1           0  0.09s           2024-11-22T13:58:50
+/opt/airflow/dags/read_write_dag.py          401  0.01s             1           0  0.10s           2024-11-22T13:58:50
+================================================================================
+[2024-11-22T13:59:51.499+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                    PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py    414  0.00s             1           0  0.09s           2024-11-22T13:59:21
+/opt/airflow/dags/read_write_dag.py          411  0.01s             1           0  0.10s           2024-11-22T13:59:21
+================================================================================
+[2024-11-22T14:00:23.115+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.08s           2024-11-22T14:00:22
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.08s           2024-11-22T14:00:22
+================================================================================
+[2024-11-22T14:00:56.045+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.08s           2024-11-22T14:00:53
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.10s           2024-11-22T14:00:53
+================================================================================
+[2024-11-22T14:01:29.073+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.07s           2024-11-22T14:01:24
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.08s           2024-11-22T14:01:24
+================================================================================
+[2024-11-22T14:01:48.193+0000] {manager.py:759} INFO - Searching for files in /opt/airflow/dags
+[2024-11-22T14:01:48.212+0000] {manager.py:762} INFO - There are 2 files in /opt/airflow/dags
+[2024-11-22T14:02:02.119+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.08s           2024-11-22T14:01:55
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.08s           2024-11-22T14:01:55
+================================================================================
+[2024-11-22T14:02:35.153+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.08s           2024-11-22T14:02:26
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.08s           2024-11-22T14:02:26
+================================================================================
+[2024-11-22T14:03:08.224+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.08s           2024-11-22T14:02:58
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.08s           2024-11-22T14:02:58
+================================================================================
+[2024-11-22T14:03:41.216+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.08s           2024-11-22T14:03:30
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.08s           2024-11-22T14:03:30
+================================================================================
+[2024-11-22T14:04:14.182+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.08s           2024-11-22T14:04:03
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.08s           2024-11-22T14:04:03
+================================================================================
+[2024-11-22T14:04:47.204+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.09s           2024-11-22T14:04:36
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.09s           2024-11-22T14:04:36
+================================================================================
+[2024-11-22T14:05:20.202+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                  PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.09s           2024-11-22T14:05:09
+/opt/airflow/dags/read_write_dag.py                                 1           0  0.08s           2024-11-22T14:05:09
+================================================================================
+[2024-11-22T14:05:53.192+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                    PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/mysql_data_entry_dag.py                           1           0  0.08s           2024-11-22T14:05:41
+/opt/airflow/dags/read_write_dag.py          531  0.00s             1           0  0.09s           2024-11-22T14:05:41
+================================================================================
+[2024-11-22T14:06:03.905+0000] {manager.py:469} INFO - Exiting gracefully upon receiving signal 15

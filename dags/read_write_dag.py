@@ -15,7 +15,7 @@ with DAG(
     spark_submit_task = SparkSubmitOperator(
         task_id="mysql_to_parquet",
         conn_id="spark_default",  # Spark connection in Airflow
-        application="/opt/airflow/jobs/mysql_to_parquet.py",  # Path to the Spark Python script in the Airflow container
+        application="/opt/airflow/jobs/read_write_dag.py",  # Path to the Spark Python script in the Airflow container
         jars="/opt/airflow/jobs/mysql-connector-java-8.0.28.jar",  # Path to the MySQL JDBC driver .jar file
         name="mysql_to_parquet_job",
         application_args=[
