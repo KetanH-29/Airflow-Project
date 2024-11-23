@@ -2,7 +2,7 @@ FROM apache/airflow:2.7.1-python3.11
 
 USER root
 
-# Install necessary dependencies
+# Install necessary system dependencies
 RUN apt-get update && \
     apt-get install -y gcc python3-dev default-jdk && \
     apt-get clean
@@ -19,4 +19,6 @@ ARG AIRFLOW_CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/con
 RUN pip install \
     apache-airflow-providers-apache-spark \
     pyspark \
+    pymysql \
+    pandas \
     --constraint "${AIRFLOW_CONSTRAINT_URL}"
