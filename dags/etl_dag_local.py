@@ -1,8 +1,11 @@
+import sys
+sys.path.append('/opt/airflow/jobs')  # Add the jobs directory to the Python path
+
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime
-from jobs.extract_task import extract_mysql_data  # Import extract function
-from jobs.transform_write_task import write_to_parquet  # Import transform function
+from extract_task import extract_mysql_data  # Import extract function
+from transform_write_task import write_to_parquet  # Import transform function
 
 default_args = {
     'owner': 'airflow',
