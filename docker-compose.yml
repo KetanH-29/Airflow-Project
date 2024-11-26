@@ -1,9 +1,14 @@
+version: '3'
+
 x-spark-common: &spark-common
   image: bitnami/spark:latest
   volumes:
     - ./jobs:/opt/bitnami/spark/jobs
+    - ./jars/mysql-connector-java-8.0.30.jar:/opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar  # Mount JAR file directly
   networks:
     - code-with-yu
+  environment:
+    - SPARK_CLASSPATH=/opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar  # Add JDBC driver to classpath
 
 x-airflow-common: &airflow-common
   build:
@@ -15,6 +20,7 @@ x-airflow-common: &airflow-common
     - ./jobs:/opt/airflow/jobs
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
+    - ./jars:/opt/airflow/jars
     - ./local_data:/opt/airflow/local_data
     - ./csv_data:/opt/airflow/local_data/csv_data
     - ./parquet_data:/opt/airflow/local_data/parquet_data
@@ -65,7 +71,7 @@ services:
 
   scheduler:
     <<: *airflow-common
-    command: bash -c "airflow db migrate && \
+    command: bash -c "airflow db upgrade && \
                       airflow users create --username admin --firstname Ketan --lastname Hadkar \
                       --role Admin --email airscholar@gmail.com --password admin && \
                       airflow scheduler"
