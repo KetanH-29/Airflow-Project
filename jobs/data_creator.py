@@ -11,7 +11,6 @@ def create_spark_session():
     """Creates a Spark session with the necessary JDBC driver for MySQL."""
     spark = SparkSession.builder \
         .appName("Insert Random Records into MySQL") \
-        .config("spark.jars", "/opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar") \
         .getOrCreate()
     return spark
 
