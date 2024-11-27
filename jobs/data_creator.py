@@ -11,6 +11,8 @@ def create_spark_session():
     """Creates a Spark session with the necessary JDBC driver for MySQL."""
     spark = SparkSession.builder \
         .appName("Insert Random Records into MySQL") \
+        .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:2.7.0") \
+        .config("spark.jars.packages", "mysql:mysql-connector-java:jar:8.0.28") \
         .getOrCreate()
     return spark
 
@@ -31,7 +33,7 @@ def insert_random_records():
     connection_properties = {
         "user": "airflow",
         "password": "airflow_password",
-        "driver": "com.mysql.cj.jdbc.Driver"
+        "driver": "com.mysql.jdbc.Driver"
     }
 
     # Write the DataFrame to MySQL using Spark JDBC

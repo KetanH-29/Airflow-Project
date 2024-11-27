@@ -36,6 +36,13 @@ services:
     ports:
       - "9090:8080"
       - "7077:7077"
+      - "4040:4040" # Cluster Manager Web UI
+      - "8020:8020" # DFS Namenode IPC, e.g. hdfs dfs -fs hdfs://sandbox:8020 -ls
+      - "10000:10000" # Thriftserver JDBC port
+      - "10001:10001" # Thriftserver HTTP protocol JDBC port
+      - "9866:9866" # DFS Datanode data transfer
+      - "9870:9870" # DFS Namenode Web UI
+      - "9864:9864" # DFS Datanode Web UI
     networks:
       - code-with-yu
   spark-worker:
@@ -48,6 +55,8 @@ services:
       SPARK_WORKER_CORES: 2
       SPARK_WORKER_MEMORY: 1g
       SPARK_MASTER_URL: spark://spark-master:7077
+    ports:
+      - "8081:8081" # Standalone Worker Web UI
     networks:
       - code-with-yu
   mysql:
