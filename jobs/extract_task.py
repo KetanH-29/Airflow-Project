@@ -1,10 +1,11 @@
 from pyspark.sql import SparkSession
 
 def extract_mysql_data():
+    """Extract data from MySQL and save it to CSV."""
     # Initialize Spark session
     spark = SparkSession.builder \
         .appName("MySQL to Spark") \
-        .config("spark.jars", "/opt/airflow/jars/mysql-connector-java-8.0.30.jar") \
+        .config("spark.jars", "/opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar") \
         .getOrCreate()
 
     # MySQL JDBC connection details
@@ -22,3 +23,6 @@ def extract_mysql_data():
     output_path = "/opt/airflow/local_data/csv_data/temp_data.csv"
     df.write.csv(output_path, header=True, mode="overwrite")
     print(f"Data extracted to {output_path}")
+
+if __name__ == "__main__":
+    extract_mysql_data()

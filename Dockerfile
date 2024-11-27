@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir \
 
 # Copy the MySQL connector JAR file into the container for both Spark and Airflow
 COPY ./jars/mysql-connector-java-8.0.30.jar /opt/airflow/jars/mysql-connector-java-8.0.30.jar
-
+COPY ./jars/mysql-connector-java-8.0.30.jar /opt/spark/jars/mysql-connector-java-8.0.30.jar
 # Verify installation of pymysql and that the connector JAR is in place
 RUN python -m pip show pymysql && \
     ls /opt/airflow/jars/mysql-connector-java-8.0.30.jar
