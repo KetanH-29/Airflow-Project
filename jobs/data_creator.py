@@ -3,6 +3,7 @@ import string
 from pyspark.sql import SparkSession
 import pandas as pd
 
+
 def generate_random_string(length=10):
     """Generates a random alphanumeric string."""
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
@@ -11,7 +12,8 @@ def create_spark_session():
     """Creates a Spark session with the necessary JDBC driver for MySQL."""
     spark = SparkSession.builder \
         .appName("Insert Random Records into MySQL") \
-        .config("spark.jars", "/opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar") \
+        .master("local") \
+        .config("spark.jars", "file:///C:/Spark/jars/mysql-connector-java-8.0.30.jar") \
         .getOrCreate()
     return spark
 
@@ -28,7 +30,7 @@ def insert_random_records():
     spark_df = spark.createDataFrame(df)
 
     # MySQL connection properties
-    jdbc_url = "jdbc:mysql://mysql:3306/test_db"  # MySQL service name and database name from docker-compose
+    jdbc_url = "jdbc:mysql://localhost:3306/test_db"  # MySQL service name and database name
     connection_properties = {
         "user": "airflow",
         "password": "airflow_password",

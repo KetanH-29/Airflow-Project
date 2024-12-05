@@ -23,12 +23,10 @@ dag = DAG(
 spark_submit_task = SparkSubmitOperator(
     task_id='submit_spark_job',
     application='/opt/airflow/jobs/data_creator.py',  # Path to the Python script you created
-    conn_id='spark_default',  # Connection ID for your Spark cluster
-    executor_memory='2g',  # Adjust memory as per your requirements
-    total_executor_cores=2,  # Adjust cores as needed
-    driver_class_path='/opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar',  # Path to MySQL connector JAR
+    conn_id='spark_conn',  # Connection ID for your Spark cluster
+    jars='/opt/airflow/jars/mysql-connector-java-8.0.30.jar',  # Path to MySQL connector JAR
     conf={
-        'spark.jars': '/opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar',  # MySQL connector JAR path
+        'spark.jars': '/opt/airflow/jars/mysql-connector-java-8.0.30.jar',  # MySQL connector JAR path
     },
     dag=dag,
 )
