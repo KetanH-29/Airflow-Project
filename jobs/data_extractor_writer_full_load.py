@@ -40,9 +40,35 @@ def extract_and_write_to_s3():
     }
 
     # Read data from MySQL
-    df = spark.read.format("jdbc") \
+    df0 = spark.read.format("jdbc") \
         .option("url", jdbc_url) \
-        .option("dbtable", "random_data") \
+        .option("dbtable", "transactions") \
+        .option("user", jdbc_properties["user"]) \
+        .option("password", jdbc_properties["password"]) \
+        .option("driver", jdbc_properties["driver"]) \
+        .load()
+
+    print("Schema of the data read from MySQL:")
+    df0.printSchema()
+    df0.show()
+
+
+    df1 = spark.read.format("jdbc") \
+        .option("url", jdbc_url) \
+        .option("dbtable", "customers") \
+        .option("user", jdbc_properties["user"]) \
+        .option("password", jdbc_properties["password"]) \
+        .option("driver", jdbc_properties["driver"]) \
+        .load()
+
+    print("Schema of the data read from MySQL:")
+    df1.printSchema()
+    df1.show()
+
+
+    df2 = spark.read.format("jdbc") \
+        .option("url", jdbc_url) \
+        .option("dbtable", "campaigns") \
         .option("user", jdbc_properties["user"]) \
         .option("password", jdbc_properties["password"]) \
         .option("driver", jdbc_properties["driver"]) \
@@ -50,7 +76,8 @@ def extract_and_write_to_s3():
 
     # Print schema of the data for verification
     print("Schema of the data read from MySQL:")
-    df.printSchema()
+    df2.printSchema()
+    df2.show()
 
     # Get the current date
     current_date = datetime.now()
@@ -59,18 +86,30 @@ def extract_and_write_to_s3():
     current_day = current_date.day
 
     # Add year, month, and day columns for partitioning
-    df = df.withColumn("year", lit(current_year)) \
+    df0 = df0.withColumn("year", lit(current_year)) \
            .withColumn("month", lit(f"{current_month:02d}")) \
            .withColumn("day", lit(f"{current_day:02d}"))
+    df1 = df1.withColumn("year", lit(current_year)) \
+        .withColumn("month", lit(f"{current_month:02d}")) \
+        .withColumn("day", lit(f"{current_day:02d}"))
+    df2 = df2.withColumn("year", lit(current_year)) \
+        .withColumn("month", lit(f"{current_month:02d}")) \
+        .withColumn("day", lit(f"{current_day:02d}"))
 
     # Define S3 output path
-    output_path = "s3a://ketan-staging-bucket/MySQL_DB/test_db/random_data/"
+    output_path0 = "s3a://ketan-staging-bucket/MySQL_DB/test_db/transactions/"
+    output_path1 = "s3a://ketan-staging-bucket/MySQL_DB/test_db/customers/"
+    output_path2 = "s3a://ketan-staging-bucket/MySQL_DB/test_db/campaigns/"
 
     # Write data to S3 in Parquet format with partitioning
-    df.write.partitionBy("year", "month", "day").parquet(output_path, mode="overwrite")
-    print(f"Data extracted from MySQL and written to {output_path} on S3")
+    df0.write.partitionBy("year", "month", "day").parquet(output_path0, mode="overwrite")
+    print(f"Data extracted from MySQL and written to {output_path0} on S3")
+    df1.write.partitionBy("year", "month", "day").parquet(output_path1, mode="overwrite")
+    print(f"Data extracted from MySQL and written to {output_path1} on S3")
+    df2.write.partitionBy("year", "month", "day").parquet(output_path2, mode="overwrite")
+    print(f"Data extracted from MySQL and written to {output_path2} on S3")
 
 if __name__ == "__main__":
     extract_and_write_to_s3()
 
-#spark-submit --jars /opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar /opt/bitnami/spark/jobs/data_extractor_writer.py
+#spark-submit --jars /opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar /opt/bitnami/spark/jobs/data_extractor_writer_full_load.py
