@@ -48311,3 +48311,43 @@ File Path                            PID    Runtime      # DAGs    # Errors  Las
 ================================================================================
 [2024-12-16T14:47:58.234+0000] {manager.py:759} INFO - Searching for files in /opt/airflow/dags
 [2024-12-16T14:47:58.367+0000] {manager.py:762} INFO - There are 3 files in /opt/airflow/dags
+[2024-12-16T14:48:24.826+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                            PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/extraction_dag.py                           1           0  0.10s           2024-12-16T14:48:00
+/opt/airflow/dags/insertion_dag.py                            1           0  0.10s           2024-12-16T14:48:00
+/opt/airflow/dags/overwrite_dag.py                            1           0  0.12s           2024-12-16T14:48:00
+================================================================================
+[2024-12-16T14:48:57.080+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                            PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/extraction_dag.py                           1           0  0.09s           2024-12-16T14:48:30
+/opt/airflow/dags/insertion_dag.py                            1           0  0.09s           2024-12-16T14:48:30
+/opt/airflow/dags/overwrite_dag.py                            1           0  0.08s           2024-12-16T14:48:30
+================================================================================
+[2024-12-16T14:49:30.305+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                            PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/extraction_dag.py                           1           0  0.10s           2024-12-16T14:49:00
+/opt/airflow/dags/insertion_dag.py                            1           0  0.10s           2024-12-16T14:49:00
+/opt/airflow/dags/overwrite_dag.py                            1           0  0.09s           2024-12-16T14:49:01
+================================================================================
+[2024-12-16T14:50:04.706+0000] {manager.py:893} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                              PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+-----------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/extraction_dag.py    422  0.00s             1           0  0.09s           2024-12-16T14:49:34
+/opt/airflow/dags/insertion_dag.py     419  0.02s             1           0  0.10s           2024-12-16T14:49:34
+/opt/airflow/dags/overwrite_dag.py                            1           0  0.09s           2024-12-16T14:49:34
+================================================================================

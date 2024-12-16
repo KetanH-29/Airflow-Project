@@ -124,4 +124,4 @@ def incremental_append():
 if __name__ == "__main__":
     incremental_append()
 
-# spark-submit --jars /opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar /opt/bitnami/spark/jobs/rough_edits.py
+# spark-submit --jars /opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar /opt/bitnami/spark/jobs/new_incremental_append.py
