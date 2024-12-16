@@ -4,7 +4,7 @@ from datetime import datetime
 import yaml
 import os
 
-def extract_and_write_to_s3():
+def incremental_append():
     """Extract the record with the max date from the transactions table and save it to S3 in Parquet format."""
 
     # Initialize Spark session
@@ -56,21 +56,21 @@ def extract_and_write_to_s3():
     # Read data from MySQL
     df0 = spark.read.format("jdbc") \
         .option("url", jdbc_url) \
-        .option("dbtable", f"({query0}) AS max_date_record") \
+        .option("dbtable", f"({query0}) AS max_date_record_transactions") \
         .option("user", jdbc_properties["user"]) \
         .option("password", jdbc_properties["password"]) \
         .option("driver", jdbc_properties["driver"]) \
         .load()
     df1 = spark.read.format("jdbc") \
         .option("url", jdbc_url) \
-        .option("dbtable", f"({query1}) AS max_date_record") \
+        .option("dbtable", f"({query1}) AS max_date_record_customers") \
         .option("user", jdbc_properties["user"]) \
         .option("password", jdbc_properties["password"]) \
         .option("driver", jdbc_properties["driver"]) \
         .load()
     df2 = spark.read.format("jdbc") \
         .option("url", jdbc_url) \
-        .option("dbtable", f"({query2}) AS max_date_record") \
+        .option("dbtable", f"({query2}) AS max_date_record_campaigns") \
         .option("user", jdbc_properties["user"]) \
         .option("password", jdbc_properties["password"]) \
         .option("driver", jdbc_properties["driver"]) \
@@ -105,9 +105,9 @@ def extract_and_write_to_s3():
         .withColumn("day", lit(f"{current_day:02d}"))
 
     # Define the S3 staging path
-    output_path0 = "s3a://ketan-staging-bucket/MySQL_DB/test_db/tables/transactions/"
-    output_path1 = "s3a://ketan-staging-bucket/MySQL_DB/test_db/tables/customers/"
-    output_path2 = "s3a://ketan-staging-bucket/MySQL_DB/test_db/tables/campaigns/"
+    output_path0 = "s3a://ketan-mirror-bucket/MySQL_DB/test_db/append/tables/transactions/"
+    output_path1 = "s3a://ketan-mirror-bucket/MySQL_DB/test_db/append/tables/customers/"
+    output_path2 = "s3a://ketan-mirror-bucket/MySQL_DB/test_db/append/tables/campaigns/"
 
     # Write data to S3 in Parquet format with partitioning
     df0.write.partitionBy("year", "month", "day").parquet(output_path0, mode="overwrite")
@@ -120,6 +120,6 @@ def extract_and_write_to_s3():
 
 
 if __name__ == "__main__":
-    extract_and_write_to_s3()
+    incremental_append()
 
 #spark-submit --jars /opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar /opt/bitnami/spark/jobs/data_extractor_writer_incremental_append.py

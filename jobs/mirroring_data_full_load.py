@@ -42,12 +42,12 @@ def copy_s3_data():
     source_path_staging0 = f"s3a://ketan-staging-bucket/MySQL_DB/test_db/tables/transactions/{date_folder}"
     source_path_staging1 = f"s3a://ketan-staging-bucket/MySQL_DB/test_db/tables/customers/{date_folder}"
     source_path_staging2 = f"s3a://ketan-staging-bucket/MySQL_DB/test_db/tables/campaigns/{date_folder}"
-    destination_path_staging0 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/transactions/{date_folder}"
-    destination_path_staging1 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/customers/{date_folder}"
-    destination_path_staging2 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/campaigns/{date_folder}"
-    destination_path_mirror0 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/transactions/{date_folder}"
-    destination_path_mirror1 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/customers/{date_folder}"
-    destination_path_mirror2 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/campaigns/{date_folder}"
+    destination_path_staging0 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/full_load/tables/transactions/{date_folder}"
+    destination_path_staging1 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/full_load/tables/customers/{date_folder}"
+    destination_path_staging2 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/full_load/tables/campaigns/{date_folder}"
+    destination_path_mirror0 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/full_load/tables/transactions/{date_folder}"
+    destination_path_mirror1 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/full_load/tables/customers/{date_folder}"
+    destination_path_mirror2 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/full_load/tables/campaigns/{date_folder}"
 
     # Step 1: Check and copy data from source_path_staging to destination_path_staging
     try:
