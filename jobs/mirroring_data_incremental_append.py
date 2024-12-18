@@ -3,6 +3,7 @@ from pyspark.sql.utils import AnalysisException
 from datetime import datetime
 import yaml
 
+
 def copy_s3_data():
     """Copy data between two S3 directories with conditions using Spark."""
 
@@ -38,82 +39,26 @@ def copy_s3_data():
     # Define the date-based folder structure
     date_folder = f"year={year}/month={month:02d}/day={day:02d}/"
 
-    # Paths
-    source_path_staging0 = f"s3a://ketan-staging-bucket/MySQL_DB/test_db/tables/transactions/{date_folder}"
-    source_path_staging1 = f"s3a://ketan-staging-bucket/MySQL_DB/test_db/tables/customers/{date_folder}"
-    source_path_staging2 = f"s3a://ketan-staging-bucket/MySQL_DB/test_db/tables/campaigns/{date_folder}"
-    destination_path_staging0 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/transactions/{date_folder}"
-    destination_path_staging1 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/customers/{date_folder}"
-    destination_path_staging2 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/campaigns/{date_folder}"
-    destination_path_mirror0 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/transactions/{date_folder}"
-    destination_path_mirror1 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/customers/{date_folder}"
-    destination_path_mirror2 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/campaigns/{date_folder}"
+    # List of table names to automate
+    table_names = ["transactions", "customers", "campaigns"]
 
-    # Step 1: Check and copy data from source_path_staging to destination_path_staging
-    try:
-        print(f"Attempting to read data from {source_path_staging0}...")
-        df_staging0 = spark.read.parquet(source_path_staging0)
-        print("Data found. Copying to destination...")
-        df_staging0.show()
-        df_staging0.write.mode("overwrite").parquet(destination_path_staging0)
-        print(f"Data successfully copied to {destination_path_staging0}")
-    except AnalysisException:
-        print(f"Data is absent at {source_path_staging0}. Skipping process.")
-        return
-    try:
-        print(f"Attempting to read data from {source_path_staging1}...")
-        df_staging1 = spark.read.parquet(source_path_staging1)
-        print("Data found. Copying to destination...")
-        df_staging1.show()
-        df_staging1.write.mode("overwrite").parquet(destination_path_staging1)
-        print(f"Data successfully copied to {destination_path_staging1}")
-    except AnalysisException:
-        print(f"Data is absent at {source_path_staging1}. Skipping process.")
-        return
-    try:
-        print(f"Attempting to read data from {source_path_staging2}...")
-        df_staging2 = spark.read.parquet(source_path_staging2)
-        print("Data found. Copying to destination...")
-        df_staging2.show()
-        df_staging2.write.mode("overwrite").parquet(destination_path_staging2)
-        print(f"Data successfully copied to {destination_path_staging2}")
-    except AnalysisException:
-        print(f"Data is absent at {source_path_staging2}. Skipping process.")
-        return
+    # Iterate over table names to dynamically create paths and copy data
+    for table_name in table_names:
+        # Define source, staging, and mirror paths dynamically
+        source_path = f"s3a://ketan-staging-bucket/MySQL_DB/test_db/type/incremental/tables/{table_name}/{date_folder}"
+        mirror_previous_path = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/incremental/tables/{table_name}/{date_folder}"
 
-
-    # Step 2: Check and copy data from destination_path_staging to destination_path_mirror
-    try:
-        print(f"Attempting to read data from {destination_path_staging0}...")
-        df_mirror0 = spark.read.parquet(destination_path_staging0)
-        print("Data found. Copying to final destination...")
-        df_mirror0.show()
-        df_mirror0.write.mode("overwrite").parquet(destination_path_mirror0)
-        print(f"Data successfully copied to {destination_path_mirror0}")
-    except AnalysisException:
-        print(f"Data has not been copied from the source_staging path0. Skipping process.")
-
-    try:
-        print(f"Attempting to read data from {destination_path_staging1}...")
-        df_mirror1 = spark.read.parquet(destination_path_staging1)
-        print("Data found. Copying to final destination...")
-        df_mirror1.show()
-        df_mirror1.write.mode("overwrite").parquet(destination_path_mirror1)
-        print(f"Data successfully copied to {destination_path_mirror1}")
-    except AnalysisException:
-        print(f"Data has not been copied from the source_staging path1. Skipping process.")
-
-    try:
-        print(f"Attempting to read data from {destination_path_staging2}...")
-        df_mirror2 = spark.read.parquet(destination_path_staging2)
-        print("Data found. Copying to final destination...")
-        df_mirror2.show()
-        df_mirror2.write.mode("overwrite").parquet(destination_path_mirror2)
-        print(f"Data successfully copied to {destination_path_mirror2}")
-    except AnalysisException:
-        print(f"Data has not been copied from the source_staging path2. Skipping process.")
-
-
+        try:
+            # Step 1: Check and copy data from source to staging
+            print(f"Attempting to read data from {source_path}...")
+            df_source = spark.read.parquet(source_path)
+            print("Data found. Copying to staging...")
+            df_source.show()
+            df_source.write.mode("overwrite").parquet(mirror_previous_path)
+            print(f"Data successfully copied to {mirror_previous_path}")
+        except AnalysisException:
+            print(f"Data is absent at {source_path}. Skipping process.")
+            continue
 
 if __name__ == "__main__":
     copy_s3_data()
