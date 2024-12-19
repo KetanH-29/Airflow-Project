@@ -59,8 +59,7 @@ def insert_random_records():
 
     # Write the DataFrames to MySQL using Spark JDBC
     # Insert data into transactions table with primary key on 'id'
-    spark_df_transactions.write.jdbc(url=jdbc_url, table="transactions", mode="append",
-                                     properties=connection_properties)
+    spark_df_transactions.write.jdbc(url=jdbc_url, table="transactions", mode="append", properties=connection_properties)
 
     # Insert data into customers table with primary key on 'id'
     spark_df_customers.write.jdbc(url=jdbc_url, table="customers", mode="append", properties=connection_properties)

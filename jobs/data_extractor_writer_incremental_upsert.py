@@ -1,15 +1,17 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import lit, col, max as spark_max
+from pyspark.sql.functions import lit
 from datetime import datetime
 import yaml
-import os
 
-def extract_and_write_to_s3():
-    """Extract records with dates greater than the max date in S3 mirror paths and save them to S3 in Parquet format."""
+# Import the full load function from the other script
+from data_extractor_writer_incremental_append import incremental_append
+from mirroring_data_incremental_append import copy_s3_data
 
+def incremental_upsert():
+    """Generalized function to handle multiple tables for incremental or full load."""
     # Initialize Spark session
     spark = SparkSession.builder \
-        .appName("MySQL to S3 Incremental") \
+        .appName("MySQL to S3") \
         .config("spark.jars", "/opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar") \
         .config("spark.driver.extraClassPath", "/opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar") \
         .config("spark.executor.extraClassPath", "/opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar") \
@@ -30,109 +32,90 @@ def extract_and_write_to_s3():
     hadoop_conf.set("fs.s3a.access.key", app_secret["s3_conf"]["access_key"])
     hadoop_conf.set("fs.s3a.secret.key", app_secret["s3_conf"]["secret_access_key"])
 
-    # MySQL JDBC connection details
-    jdbc_url = "jdbc:mysql://mysql:3306/test_db"
-    jdbc_properties = {
-        "user": "airflow",
-        "password": "airflow_password",
-        "driver": "com.mysql.cj.jdbc.Driver"
-    }
+    # List of tables to process
+    tables = ["transactions", "customers", "campaigns"]  # Add table names as needed
 
-    # Define S3 mirror paths
-    base_path = "s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/full_load/"
-    current_date = datetime.now()
-    year, month, day = current_date.year, f"{current_date.month:02d}", f"{current_date.day:02d}"
-    source_path_staging0 = f"{base_path}transactions/year={year}/month={month}/day={day}/"
-    source_path_staging1 = f"{base_path}customers/year={year}/month={month}/day={day}/"
-    source_path_staging2 = f"{base_path}campaigns/year={year}/month={month}/day={day}/"
+    # Define the base paths for S3 storage
+    staging_path = "s3a://ketan-staging-bucket/MySQL_DB/test_db/type/incremental/tables"
+    base_previous_path = "s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/incremental/tables"
+    output_path = "s3a://ketan-staging-bucket/MySQL_DB/test_db/type"
 
-    # Define S3 staging paths for output
-    output_path0 = "s3a://ketan-staging-bucket/MySQL_DB/test_db/upsert/tables/transactions/"
-    output_path1 = "s3a://ketan-staging-bucket/MySQL_DB/test_db/upsert/tables/customers/"
-    output_path2 = "s3a://ketan-staging-bucket/MySQL_DB/test_db/upsert/tables/campaigns/"
+    # Iterate through each table
+    for table in tables:
+        print(f"Processing table: {table}")
+        source_staging_path = f"{staging_path}/{table}"
+        source_previous_path = f"{base_previous_path}/{table}"
+        upsert_output_path = f"{output_path}/upsert/tables/{table}"
 
-    # Function to get max date from S3
-    def get_max_date(s3_path):
+        data_exists_in_staging = False
+        data_exists_in_previous = False
+
+        # Check if data exists in staging path (partition-aware)
         try:
-            s3_df = spark.read.parquet(s3_path)
-            max_date = s3_df.agg(spark_max("date").alias("max_date")).collect()[0]["max_date"]
-            return max_date
+            staging_data = spark.read.parquet(source_staging_path)
+            data_exists_in_staging = True
+            print(f"Data found in staging path: {source_staging_path}")
         except Exception as e:
-            print(f"Could not fetch max date from {s3_path}: {e}")
-            return None
+            print(f"No data found in staging path: {source_staging_path}. Error: {e}")
 
-    # Get max dates from S3 paths
-    max_date_transactions = get_max_date(source_path_staging0)
-    max_date_customers = get_max_date(source_path_staging1)
-    max_date_campaigns = get_max_date(source_path_staging2)
+        # Check if data exists in previous path (partition-aware)
+        try:
+            previous_data = spark.read.parquet(source_previous_path)
+            data_exists_in_previous = True
+            print(f"Data found in previous path: {source_previous_path}")
+        except Exception as e:
+            print(f"No data found in previous path: {source_previous_path}. Error: {e}")
 
-    print(f"Max Date - Transactions: {max_date_transactions}")
-    print(f"Max Date - Customers: {max_date_customers}")
-    print(f"Max Date - Campaigns: {max_date_campaigns}")
+        # If data exists in both paths, proceed with incremental load
+        if data_exists_in_staging and data_exists_in_previous:
+            print(f"Data found in both staging and previous paths for table: {table}. Proceeding with incremental load...")
 
-    # Read data from MySQL with incremental filtering
-    df0 = spark.read.format("jdbc") \
-        .option("url", jdbc_url) \
-        .option("dbtable", "transactions") \
-        .option("user", jdbc_properties["user"]) \
-        .option("password", jdbc_properties["password"]) \
-        .option("driver", jdbc_properties["driver"]) \
-        .load()
+            # Perform an anti-join (using Spark SQL or DataFrame API)
+            try:
+                # Register DataFrames as temporary views
+                staging_data.createOrReplaceTempView("staging_table")
+                previous_data.createOrReplaceTempView("previous_table")
 
-    if max_date_transactions:
-        df0 = df0.filter(col("date") > lit(max_date_transactions))
+                # Anti-join SQL query
+                query = f"""
+                SELECT *
+                FROM staging_table s
+                WHERE NOT EXISTS (
+                    SELECT 1
+                    FROM previous_table p
+                    WHERE {" AND ".join([f"s.{col} = p.{col}" for col in staging_data.columns])}
+                )
+                """
+                incremental_data = spark.sql(query)
 
-    df1 = spark.read.format("jdbc") \
-        .option("url", jdbc_url) \
-        .option("dbtable", "customers") \
-        .option("user", jdbc_properties["user"]) \
-        .option("password", jdbc_properties["password"]) \
-        .option("driver", jdbc_properties["driver"]) \
-        .load()
+                # Check if incremental data is not empty and write to output path
+                if incremental_data.count() > 0:
+                    # Get current date for partitioning
+                    current_date = datetime.now()
+                    current_year = current_date.year
+                    current_month = current_date.month
+                    current_day = current_date.day
 
-    if max_date_customers:
-        df1 = df1.filter(col("date") > lit(max_date_customers))
+                    # Add year, month, and day columns for partitioning
+                    incremental_data = incremental_data.withColumn("year", lit(current_year)) \
+                        .withColumn("month", lit(f"{current_month:02d}")) \
+                        .withColumn("day", lit(f"{current_day:02d}"))
 
-    df2 = spark.read.format("jdbc") \
-        .option("url", jdbc_url) \
-        .option("dbtable", "campaigns") \
-        .option("user", jdbc_properties["user"]) \
-        .option("password", jdbc_properties["password"]) \
-        .option("driver", jdbc_properties["driver"]) \
-        .load()
-
-    if max_date_campaigns:
-        df2 = df2.filter(col("date") > lit(max_date_campaigns))
-
-    # Add year, month, and day columns for partitioning
-    df0 = df0.withColumn("year", lit(year)) \
-             .withColumn("month", lit(month)) \
-             .withColumn("day", lit(day))
-
-    df1 = df1.withColumn("year", lit(year)) \
-             .withColumn("month", lit(month)) \
-             .withColumn("day", lit(day))
-
-    df2 = df2.withColumn("year", lit(year)) \
-             .withColumn("month", lit(month)) \
-             .withColumn("day", lit(day))
-
-    # Write data to S3 in Parquet format with partitioning
-    df0.write.partitionBy("year", "month", "day").parquet(output_path0, mode="overwrite")
-    df0.show()
-    print(f"Data written to {output_path0}")
-
-    df1.write.partitionBy("year", "month", "day").parquet(output_path1, mode="overwrite")
-    df1.show()
-    print(f"Data written to {output_path1}")
-
-    df2.write.partitionBy("year", "month", "day").parquet(output_path2, mode="overwrite")
-    df2.show()
-    print(f"Data written to {output_path2}")
+                    # Write data to S3 with partitioning
+                    incremental_data.write.partitionBy("year", "month", "day") \
+                        .parquet(upsert_output_path, mode="append")
+                    print(f"Incremental data successfully written to {upsert_output_path} for table {table}")
+                else:
+                    print(f"No new incremental data found for table {table}. Skipping write operation.")
+            except Exception as e:
+                print(f"Error during incremental load for table {table}: {e}")
+        else:
+            print(f"Data missing in either or both paths for table {table}. Running full load instead.")
+            incremental_append()  # Call the full load function directly
+            copy_s3_data()  # Run additional copy logic if needed
 
 if __name__ == "__main__":
-    extract_and_write_to_s3()
+    incremental_upsert()
 
 
 # spark-submit --jars /opt/bitnami/spark/jars/mysql-connector-java-8.0.30.jar /opt/bitnami/spark/jobs/data_extractor_writer_incremental_upsert.py
-
