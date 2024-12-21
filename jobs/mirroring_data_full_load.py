@@ -42,9 +42,9 @@ def copy_s3_data():
     source_path_staging0 = f"s3a://ketan-staging-bucket/MySQL_DB/test_db/tables/transactions/{date_folder}"
     source_path_staging1 = f"s3a://ketan-staging-bucket/MySQL_DB/test_db/tables/customers/{date_folder}"
     source_path_staging2 = f"s3a://ketan-staging-bucket/MySQL_DB/test_db/tables/campaigns/{date_folder}"
-    destination_path_current_mirror0 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/full_load/tables/transactions/{date_folder}"
-    destination_path_current_mirror1 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/full_load/tables/customers/{date_folder}"
-    destination_path_current_mirror2 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/full_load/tables/campaigns/{date_folder}"
+    destination_path_staging0 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/full_load/tables/transactions/{date_folder}"
+    destination_path_staging1 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/full_load/tables/customers/{date_folder}"
+    destination_path_staging2 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/current/full_load/tables/campaigns/{date_folder}"
     destination_path_mirror0 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/full_load/tables/transactions/{date_folder}"
     destination_path_mirror1 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/full_load/tables/customers/{date_folder}"
     destination_path_mirror2 = f"s3a://ketan-mirror-bucket/MySQL_DB/test_db/tables/previous/full_load/tables/campaigns/{date_folder}"
@@ -55,8 +55,8 @@ def copy_s3_data():
         df_staging0 = spark.read.parquet(source_path_staging0)
         print("Data found. Copying to destination...")
         df_staging0.show()
-        df_staging0.write.mode("overwrite").parquet(destination_path_current_mirror0)
-        print(f"Data successfully copied to {destination_path_current_mirror0}")
+        df_staging0.write.mode("overwrite").parquet(destination_path_staging0)
+        print(f"Data successfully copied to {destination_path_staging0}")
     except AnalysisException:
         print(f"Data is absent at {source_path_staging0}. Skipping process.")
         return
@@ -65,8 +65,8 @@ def copy_s3_data():
         df_staging1 = spark.read.parquet(source_path_staging1)
         print("Data found. Copying to destination...")
         df_staging1.show()
-        df_staging1.write.mode("overwrite").parquet(destination_path_current_mirror1)
-        print(f"Data successfully copied to {destination_path_current_mirror1}")
+        df_staging1.write.mode("overwrite").parquet(destination_path_staging1)
+        print(f"Data successfully copied to {destination_path_staging1}")
     except AnalysisException:
         print(f"Data is absent at {source_path_staging1}. Skipping process.")
         return
@@ -75,16 +75,16 @@ def copy_s3_data():
         df_staging2 = spark.read.parquet(source_path_staging2)
         print("Data found. Copying to destination...")
         df_staging2.show()
-        df_staging2.write.mode("overwrite").parquet(destination_path_current_mirror2)
-        print(f"Data successfully copied to {destination_path_current_mirror2}")
+        df_staging2.write.mode("overwrite").parquet(destination_path_staging2)
+        print(f"Data successfully copied to {destination_path_staging2}")
     except AnalysisException:
         print(f"Data is absent at {source_path_staging2}. Skipping process.")
         return
 
     # Step 2: Check and copy data from destination_path_staging to destination_path_mirror
     try:
-        print(f"Attempting to read data from {destination_path_current_mirror0}...")
-        df_mirror0 = spark.read.parquet(destination_path_current_mirror0)
+        print(f"Attempting to read data from {destination_path_staging0}...")
+        df_mirror0 = spark.read.parquet(destination_path_staging0)
         print("Data found. Copying to final destination...")
         df_mirror0.show()
         df_mirror0.write.mode("overwrite").parquet(destination_path_mirror0)
@@ -93,8 +93,8 @@ def copy_s3_data():
         print(f"Data has not been copied from the source_staging path0. Skipping process.")
 
     try:
-        print(f"Attempting to read data from {destination_path_current_mirror1}...")
-        df_mirror1 = spark.read.parquet(destination_path_current_mirror1)
+        print(f"Attempting to read data from {destination_path_staging1}...")
+        df_mirror1 = spark.read.parquet(destination_path_staging1)
         print("Data found. Copying to final destination...")
         df_mirror1.show()
         df_mirror1.write.mode("overwrite").parquet(destination_path_mirror1)
@@ -103,8 +103,8 @@ def copy_s3_data():
         print(f"Data has not been copied from the source_staging path1. Skipping process.")
 
     try:
-        print(f"Attempting to read data from {destination_path_current_mirror2}...")
-        df_mirror2 = spark.read.parquet(destination_path_current_mirror2)
+        print(f"Attempting to read data from {destination_path_staging2}...")
+        df_mirror2 = spark.read.parquet(destination_path_staging2)
         print("Data found. Copying to final destination...")
         df_mirror2.show()
         df_mirror2.write.mode("overwrite").parquet(destination_path_mirror2)
